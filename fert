@@ -1,0 +1,27 @@
+let numDesiredN = NumberFormat.decimalFormatter.number(from: self.desiredAmountOfNitrogen)?.floatValue ?? 0
+guard let percentNitro = Float(self.nitrogen) else { return }
+guard let percentPhosphorus = Float(self.phosphorus) else { return }
+guard let percentPotassium = Float(self.potassium) else { return }
+guard let lawnSizeInt = Int(self.lawnSize) else { return }
+
+let decimalN = percentNitro / 100
+var decimalPh = percentPhosphorus / 100
+var decimalPo = percentPotassium / 100
+
+if calcOxide {
+  decimalPh *= 2.2914
+  decimalPo *= 1.2046
+}
+
+let denominator = self.selectedNutrient == "N" ? decimalN :
+                  self.selectedNutrient == "P" ? decimalPh :
+                  self.selectedNutrient == "K" ? decimalPo : decimalN
+
+let lbsNeeded = numDesiredN / denominator
+
+let areaSize = Float(ActiveAmount.current == .metric ? 100 : 1000)
+
+let poundsNeeded = lbsNeeded * (lawnSize / areaSize)
+let nGiven = lbsNeeded * decimalN
+let pGiven = lbsNeeded * decimalPh
+let kGiven = lbsNeeded * decimalPo
